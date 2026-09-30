@@ -8,8 +8,9 @@ pipeline {
             }
             steps {
                 sh 'python -m py_compile source/main.py source/producto.py'
-                stash(name: 'resultado -compilacion', includes: 'sources/*.py*')
+                stash(name: 'resultado -compilacion', includes: 'source/*.py*')
                 echo "Compilacion Correcta"
+                
             }
         }
     }
