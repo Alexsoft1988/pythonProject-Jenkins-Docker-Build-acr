@@ -25,23 +25,6 @@ pipeline {
             }
         }
     }
-    stages {
-        stage('Analisis de SonarQube') {
-            steps {
-                script {
-                    scannerHome = tool 'sonar-scanner'
-                }
-                withSonarQubeEnv("${SONAR_SERVER}") {
-                        ${SONAR_SERVER}/bin/sonar-scanner \
-                            -Dsonar.projectKey=${REPO_NAME} \
-                            -Dsonar.projectName=${REPO_NAME} \
-                            -Dsonar.sources=.
-                            
-                    """
-                }
-            }
-        }
-    }
     post {
 
         success {
