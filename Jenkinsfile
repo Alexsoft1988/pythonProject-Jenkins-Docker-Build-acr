@@ -1,5 +1,5 @@
 pipeline {
-    agent anygit 
+    agent any
     environment {
         SONAR_SERVER = 'sonarqube-server'
         REPO_NAME = "${env.GIT_URL.split('/').last().split('\\.').first()}"
