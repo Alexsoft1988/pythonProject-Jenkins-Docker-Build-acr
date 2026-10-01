@@ -32,7 +32,7 @@ pipeline {
                 }
                 withSonarQubeEnv("${SONAR_SERVER}") {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
                     sh """
-                        ${SONAR_SERVER}/bin/sonar-scanner \
+                        ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=${REPO_NAME} \
                             -Dsonar.projectName=${REPO_NAME} \
                             -Dsonar.sources=.
