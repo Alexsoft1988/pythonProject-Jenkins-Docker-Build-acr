@@ -25,6 +25,22 @@ pipeline {
                 archiveArtifacts 'source/*.py*'
             }
         }
+        stage('Analisis de SonarQube') {
+            steps {
+                script {
+                    scannerHome = tool 'sonar-scanner'// must match the name of an actual scanner installation directory on your Jenkins build agent
+                }
+                withSonarQubeEnv("${SONAR_SERVER}") {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
+                    sh """
+                        ${SONAR_SERVER}/bin/sonar-scanner \
+                            -Dsonar.projectKey=${REPO_NAME} \
+                            -Dsonar.projectName=${REPO_NAME} \
+                            -Dsonar.sources=.
+                            
+                    """
+                }
+            }
+        }
     }
     post {
 
