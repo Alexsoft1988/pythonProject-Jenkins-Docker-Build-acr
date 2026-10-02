@@ -8,7 +8,7 @@ pipeline {
         IMAGE_TAG        = 'latest'
         DOCKERFILE_PATH  = 'Dockerfile'
         BUILD_NUMBER          = "${env.BUILD_NUMBER}"
-        ACR_REGISTRY     = 'http://3.139.106.21:8090/'
+        ACR_REGISTRY     = 'http://3.139.106.21:8090'
         DOCKER_CREDS     = credentials('docker-token')
        
     }
