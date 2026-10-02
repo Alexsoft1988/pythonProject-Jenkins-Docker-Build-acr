@@ -25,19 +25,20 @@ pipeline {
             }
         }
 
-        stage('Compilar con python') {
-            agent {
-                docker { image 'python:2-alpine' }
-            }
-            steps {
-                sh 'python -m py_compile source/main.py source/producto.py'
-                stash(name: 'resultado -compilacion', includes: 'source/*.py*')
-                echo "Compilacion Correcta"
-                archiveArtifacts 'source/*.py*'
-            }
-        }
+        
         stage('Ejecucion en Paralelo') {
                 parallel {
+                        stage('Compilar con python') {
+                            agent {
+                                docker { image 'python:2-alpine' }
+                            }
+                            steps {
+                                sh 'python -m py_compile source/main.py source/producto.py'
+                                stash(name: 'resultado -compilacion', includes: 'source/*.py*')
+                                echo "Compilacion Correcta"
+                                archiveArtifacts 'source/*.py*'
+                            }
+                        }
                         stage('Analisis de SonarQube') {
                             steps {
                                 script {
@@ -54,7 +55,13 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Build Imagen Docker') {
+                        
+
+                }
+
+        }
+        
+        stage('Build Imagen Docker') {
                             steps {
 
                                     sh 'docker build -t ${IMG_NAME} .'
@@ -63,10 +70,6 @@ pipeline {
                                 }
                         }
 
-                }
-
-        }
-        
         stage('Docker Login') {
            steps {
                echo 'Iniciar en Docker'
