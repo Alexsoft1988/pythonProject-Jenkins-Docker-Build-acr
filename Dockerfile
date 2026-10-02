@@ -17,4 +17,4 @@ RUN pip3 list --format=columns
 USER 1001
 
 
-ENTRYPOINT ["python3", "/app/sourc/main.py"]
+ENTRYPOINT ["python3", "/app/source/main.py"]
