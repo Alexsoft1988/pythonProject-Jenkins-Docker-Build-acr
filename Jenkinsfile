@@ -8,7 +8,7 @@ pipeline {
         IMAGE_TAG        = 'latest'
         DOCKERFILE_PATH  = 'Dockerfile'
         BUILD_NUMBER          = "${env.BUILD_NUMBER}"
-        ACR_REGISTRY     = 'lab.docker-jenkins'
+        ACR_REGISTRY     = 'alexsoft1988/lab.docker-jenkins'
         DOCKER_CREDS     = credentials('docker-token')
        
     }
