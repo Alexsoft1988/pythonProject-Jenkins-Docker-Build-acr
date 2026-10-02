@@ -3,15 +3,6 @@ pipeline {
     environment {
         SONAR_SERVER = 'sonarqube-server'
         REPO_NAME = "${env.GIT_URL.split('/').last().split('\\.').first()}"
-
-        IMAGE_NAME       = 'aplicacion-python'
-        IMAGE_TAG        = 'latest'
-        DOCKERFILE_PATH  = 'Dockerfile'
-        BUILD_NUMBER          = "${env.BUILD_NUMBER}"
-        ACR_REGISTRY     = 'alexsoft1988/lab.docker-jenkins'
-        DOCKER_CREDS     = credentials('docker-token')
-       DOCKER_HUB     = 'alexsoft1988/lab.docker-jenkins:tagname'
-       
         DOCKER_REPO = 'alexsoft1988/lab.docker-jenkins'
         IMG_NAME    = 'aplicacion-python'
     }
