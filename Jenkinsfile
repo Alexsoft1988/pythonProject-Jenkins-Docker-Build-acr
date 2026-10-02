@@ -7,8 +7,10 @@ pipeline {
         IMAGE_NAME       = 'aplicacion-python'
         IMAGE_TAG        = 'latest'
         DOCKERFILE_PATH  = 'Dockerfile'
-        VERSION          = "${env.BUILD_NUMBER}"
+        BUILD_NUMBER          = "${env.BUILD_NUMBER}"
         ACR_REGISTRY     = 'lab.docker.jenkins'
+        DOCKER_CREDS_USR     = 'alexsoft1988'
+        DOCKER_CREDS_PSW    = 'AGCd$2025_t3@35'
        
     }
     stages {
@@ -32,14 +34,7 @@ pipeline {
                 archiveArtifacts 'source/*.py*'
             }
         }
-        stage('Build Image Docker') {
-        steps {
-                
-                sh 'docker build -t ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE_PATH} .'
-                echo "imagen Docker Generado: ${DOCKERFILE_PATH}"
-               
-            }
-        }
+       
         stage('Analisis de SonarQube') {
             steps {
                 script {
@@ -56,6 +51,27 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Image Docker') {
+        steps {
+                
+                sh 'docker build -t ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE_PATH} .'
+                echo "imagen Docker Generado: ${DOCKERFILE_PATH}"
+               
+            }
+        }
+        stage('Publicar Imagen Docker') {
+        steps {
+            sh '''
+            set -eux
+            docker login ${ACR_REGISTRY} -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
+            docker tag ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ${ACR_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}
+            docker push ${ACR_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}
+            docker logout
+            '''
+        }
+    }
+
     }
     post {
 
