@@ -10,7 +10,7 @@ pipeline {
         BUILD_NUMBER          = "${env.BUILD_NUMBER}"
         ACR_REGISTRY     = 'alexsoft1988/lab.docker-jenkins'
         DOCKER_CREDS     = credentials('docker-token')
-       
+       DOCKER_HUB     = 'alexsoft1988/lab.docker-jenkins:tagname'
     }
     stages {
         stage('Checkout con python') {
@@ -59,12 +59,13 @@ pipeline {
                
             }
         }
+         
         stage('Publicar Imagen Docker') {
         steps {
             sh '''
             set -eux
             docker login ${ACR_REGISTRY} -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
-            docker push ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+            docker push ${DOCKER_HUB}
             docker logout
             '''
         }
