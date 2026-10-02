@@ -11,6 +11,9 @@ pipeline {
         ACR_REGISTRY     = 'alexsoft1988/lab.docker-jenkins'
         DOCKER_CREDS     = credentials('docker-token')
        DOCKER_HUB     = 'alexsoft1988/lab.docker-jenkins:tagname'
+       
+        DOCKER_REPO = 'alexsoft1988/lab.docker-jenkins'
+        IMG_NAME    = 'aplicacion-python'
     }
     stages {
         stage('Checkout con python') {
@@ -53,10 +56,10 @@ pipeline {
 
         stage('Build Image Docker') {
         steps {
-                
-                sh 'docker build -t ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE_PATH} .'
-                echo "imagen Docker Generado: ${DOCKERFILE_PATH}"
-               
+
+                sh 'docker build -t ${IMG_NAME} .'
+                sh 'docker tag ${IMG_NAME} ${DOCKER_REPO}:${IMG_NAME}'
+
             }
         }
 
@@ -70,13 +73,13 @@ pipeline {
          
         stage('Publicar Imagen Docker') {
         steps {
-            sh '''
-            set -eux
-            docker login ${ACR_REGISTRY} -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
-            docker push ${DOCKER_HUB}
-            docker logout
-            '''
-        }
+                withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'PSWD', usernameVariable: 'LOGIN')]) {
+                    script {
+                        sh 'echo ${PSWD} | docker login -u ${LOGIN} --password-stdin'
+                        sh 'docker push ${DOCKER_REPO}:${IMG_NAME}'
+                    }
+                }
+            }
     }
 
     }
