@@ -3,6 +3,13 @@ pipeline {
     environment {
         SONAR_SERVER = 'sonarqube-server'
         REPO_NAME = "${env.GIT_URL.split('/').last().split('\\.').first()}"
+
+        IMAGE_NAME       = 'aplicacion-python'
+        IMAGE_TAG        = 'latest'
+        DOCKERFILE_PATH  = 'Dockerfile'
+        VERSION          = ${env.BUILD_NUMBER}
+         ACR_REGISTRY     = 'lab.docker.jenkins'
+       
     }
     stages {
         stage('Checkout con python') {
@@ -23,6 +30,22 @@ pipeline {
                 stash(name: 'resultado -compilacion', includes: 'source/*.py*')
                 echo "Compilacion Correcta"
                 archiveArtifacts 'source/*.py*'
+            }
+        }
+        stage('Build Image Docker') {
+        steps {
+                copyArtifacts(
+                    projectName: env.JOB_NAME,
+                    selector: [$class: 'SpecificBuildSelector', buildNumber: "${env.BUILD_NUMBER}"],
+                    filter: 'source/*.py',
+                    fingerprintArtifacts: true,
+                    flatten: true,
+                    target: 'source'
+                )
+            
+                sh 'docker build -t ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE_PATH} .'
+                echo "imagen Docker Generado: ${DOCKERFILE_PATH}"
+               
             }
         }
         stage('Analisis de SonarQube') {
