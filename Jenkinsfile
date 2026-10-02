@@ -7,8 +7,8 @@ pipeline {
         IMAGE_NAME       = 'aplicacion-python'
         IMAGE_TAG        = 'latest'
         DOCKERFILE_PATH  = 'Dockerfile'
-        VERSION          = ${env.BUILD_NUMBER}
-         ACR_REGISTRY     = 'lab.docker.jenkins'
+        VERSION          = env.BUILD_NUMBER
+        ACR_REGISTRY     = 'lab.docker.jenkins'
        
     }
     stages {
