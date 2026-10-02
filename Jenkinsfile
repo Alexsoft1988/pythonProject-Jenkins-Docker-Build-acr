@@ -36,33 +36,37 @@ pipeline {
                 archiveArtifacts 'source/*.py*'
             }
         }
-       
-        stage('Analisis de SonarQube') {
-            steps {
-                script {
-                    scannerHome = tool 'sonar-scanner'
+        stage('Ejecucion en Paralelo') {
+                parallel {
+                        stage('Analisis de SonarQube') {
+                            steps {
+                                script {
+                                    scannerHome = tool 'sonar-scanner'
+                                }
+                                withSonarQubeEnv("${SONAR_SERVER}") {
+                                    sh """
+                                        ${scannerHome}/bin/sonar-scanner \
+                                            -Dsonar.projectKey=${REPO_NAME} \
+                                            -Dsonar.projectName=${REPO_NAME} \
+                                            -Dsonar.sources=.
+                                            
+                                    """
+                                }
+                            }
+                        }
+                        stage('Build Image Docker') {
+                            steps {
+
+                                    sh 'docker build -t ${IMG_NAME} .'
+                                    sh 'docker tag ${IMG_NAME} ${DOCKER_REPO}:${IMG_NAME}'
+
+                                }
+                        }
+
                 }
-                withSonarQubeEnv("${SONAR_SERVER}") {
-                    sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=${REPO_NAME} \
-                            -Dsonar.projectName=${REPO_NAME} \
-                            -Dsonar.sources=.
-                            
-                    """
-                }
-            }
+
         }
-
-        stage('Build Image Docker') {
-        steps {
-
-                sh 'docker build -t ${IMG_NAME} .'
-                sh 'docker tag ${IMG_NAME} ${DOCKER_REPO}:${IMG_NAME}'
-
-            }
-        }
-
+        
         stage('Docker Login') {
            steps {
                echo 'Iniciar en Docker'
