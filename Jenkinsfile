@@ -9,8 +9,7 @@ pipeline {
         DOCKERFILE_PATH  = 'Dockerfile'
         BUILD_NUMBER          = "${env.BUILD_NUMBER}"
         ACR_REGISTRY     = 'lab.docker.jenkins'
-        DOCKER_CREDS_USR     = 'alexsoft1988'
-        DOCKER_CREDS_PSW    = 'AGCd$2025_t3@35'
+        DOCKER_CREDS     = credentials('docker-token')
        
     }
     stages {
