@@ -34,15 +34,7 @@ pipeline {
         }
         stage('Build Image Docker') {
         steps {
-                copyArtifacts(
-                    projectName: env.JOB_NAME,
-                    selector: [$class: 'SpecificBuildSelector', buildNumber: "${env.BUILD_NUMBER}"],
-                    filter: 'source/*.py',
-                    fingerprintArtifacts: true,
-                    flatten: true,
-                    target: 'source'
-                )
-            
+                
                 sh 'docker build -t ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE_PATH} .'
                 echo "imagen Docker Generado: ${DOCKERFILE_PATH}"
                
