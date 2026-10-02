@@ -38,9 +38,9 @@ pipeline {
         stage('Analisis de SonarQube') {
             steps {
                 script {
-                    scannerHome = tool 'sonar-scanner'// must match the name of an actual scanner installation directory on your Jenkins build agent
+                    scannerHome = tool 'sonar-scanner'
                 }
-                withSonarQubeEnv("${SONAR_SERVER}") {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
+                withSonarQubeEnv("${SONAR_SERVER}") {
                     sh """
                         ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=${REPO_NAME} \
