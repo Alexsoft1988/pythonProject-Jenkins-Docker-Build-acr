@@ -67,7 +67,7 @@ pipeline {
            steps {
                echo 'Iniciar en Docker'
                sh 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin docker.io'
-               echo 'Login Successfull'
+               echo 'Login correcto'
            }
        }
          
