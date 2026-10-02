@@ -64,8 +64,7 @@ pipeline {
             sh '''
             set -eux
             docker login ${ACR_REGISTRY} -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
-            docker tag ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ${ACR_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}
-            docker push ${ACR_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}
+            docker push ${ACR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
             docker logout
             '''
         }
