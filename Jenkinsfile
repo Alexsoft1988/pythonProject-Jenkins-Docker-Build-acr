@@ -5,7 +5,7 @@ pipeline {
         REPO_NAME = "${env.GIT_URL.split('/').last().split('\\.').first()}"
         DOCKER_REPO = 'alexsoft1988/lab.docker-jenkins'
         IMG_NAME    = 'aplicacion-python'
-        DOCKER_CREDS = credentials('docker-token')
+        DOCKER_CREDS = credentials('docker-token') 
     }
     stages {
         stage('Checkout con python') {
