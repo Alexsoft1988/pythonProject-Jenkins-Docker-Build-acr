@@ -1,5 +1,5 @@
 
-from source.producto import Producto
+from producto import Producto
 
 p1= Producto(1,"producto 1", 50)
 p2= Producto(2,"producto 1", 150)
