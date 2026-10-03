@@ -1,4 +1,4 @@
-pipeline {
+pipeline { 
     agent any
     environment {
         SONAR_SERVER = 'sonarqube-server'
