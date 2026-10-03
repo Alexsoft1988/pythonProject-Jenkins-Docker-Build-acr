@@ -61,7 +61,7 @@ pipeline {
       }
 
       steps {
-        unstash 'app-jar'
+       
 
         sh '''
           set -eux
